@@ -12,4 +12,5 @@ test('Successful login validation', async ({ page }) => {
     await login.login('6Q83gs@&r');
     await home.clickCheckYourRateCTA();
     await getStarted.fillGetStartedForm();
+    await getStarted.setLoanAmount(20000);
 });
