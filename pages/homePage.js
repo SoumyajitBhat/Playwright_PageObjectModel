@@ -1,10 +1,17 @@
-exports.homePage = class homePage{
-    constructor(page){
-        this.page = page;
-    }
+const { expect } = require('@playwright/test');
 
-    async logout(){
-        await this.page.getByRole('button', { name: 'Open Menu' }).click()
-        await this.page.locator('[data-test="logout-sidebar-link"]').click()
-    }
-}
+exports.HomePage = class HomePage {
+  constructor(page) {
+    this.page = page;
+
+    // Locators
+    this.checkYourRateCTA = page
+      .locator('a:has-text("Check your rate")')
+      .first();
+  }
+
+  async clickCheckYourRateCTA() {
+    await expect(this.checkYourRateCTA).toBeVisible();
+    await this.checkYourRateCTA.click();
+  }
+};

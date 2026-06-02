@@ -1,14 +1,19 @@
-exports.loginPage = class loginPage{
-    constructor(page){
-        this.page = page
-    }
+exports.LoginPage = class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.url = 'https://staging.xag.co.nz/';
 
-    async navigate(){
-        await this.page.goto('https://www.saucedemo.com/')
-    }
-    async login(username, password){
-        await this.page.locator('[data-test="username"]').fill(username)
-        await this.page.locator('[data-test="password"]').fill(password)
-        await this.page.locator('[data-test="login-button"]').click()
-    }
-}
+    // Locators
+    this.passwordInput = page.locator('[type="password"]');
+    this.submitButton = page.locator('[type="submit"]');
+  }
+
+  async navigate() {
+    await this.page.goto(this.url);
+  }
+
+  async login(password) {
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
+  }
+};
