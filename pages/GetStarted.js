@@ -18,7 +18,7 @@ exports.GetStartedPage = class GetStartedPage {
   }
   getSliderAmount(amount) {
    return this.page.getByText(amount.toString(), { exact: true });
-}
+  }
 
   async setLoanAmount(targetAmount) {
     const minAmount = 2000;

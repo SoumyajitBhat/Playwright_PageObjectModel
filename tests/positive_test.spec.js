@@ -16,7 +16,7 @@ test("Successful login validation", async ({ page }) => {
   const signup = new SignupPage(page);
   const addressDetails = new AddressDetailsPage(page);
   const employmentStatus = new EmploymentStatusPage(page);
-    const bankDetails = new BankDetailsPage(page);
+  const bankDetails = new BankDetailsPage(page);
   
   await login.navigate();
   await login.login("6Q83gs@&r");
