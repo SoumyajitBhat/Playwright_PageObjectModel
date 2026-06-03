@@ -1,6 +1,6 @@
-const { expect } = require("@playwright/test");
+import { expect } from "@playwright/test";
 
-exports.GetStartedPage = class GetStartedPage {
+export class GetStartedPage {
   constructor(page) {
     this.page = page;
 
@@ -14,10 +14,10 @@ exports.GetStartedPage = class GetStartedPage {
     this.emailInput = page.locator("#Email");
     this.confirmEmailInput = page.locator("#email");
     this.mobilePhoneInput = page.locator("#MobilePhone");
-    this.continueButton = page.getByRole("button", {name: "Continue",});
+    this.continueButton = page.getByRole("button", { name: "Continue", });
   }
   getSliderAmount(amount) {
-   return this.page.getByText(amount.toString(), { exact: true });
+    return this.page.getByText(amount.toString(), { exact: true });
   }
 
   async setLoanAmount(targetAmount) {
@@ -51,15 +51,15 @@ exports.GetStartedPage = class GetStartedPage {
     await expect(this.GetStartedPageHeading).toBeVisible();
   }
 
-  async fillGetStartedForm({amount,loanPurpose,email,phone}) {
+  async fillGetStartedForm({ amount, loanPurpose, email, phone }) {
     await this.manualEntryOption.click();
     await this.loanAmountInput.clear();
     await this.loanAmountInput.fill(amount);
     await expect(this.getSliderAmount(amount)).toBeVisible();
-    await this.loanPurposeDropdown.selectOption({label: loanPurpose});
+    await this.loanPurposeDropdown.selectOption({ label: loanPurpose });
     await this.emailInput.fill(email);
     await this.confirmEmailInput.fill(email);
     await this.mobilePhoneInput.fill(phone);
     await this.continueButton.click();
   }
-};
+}

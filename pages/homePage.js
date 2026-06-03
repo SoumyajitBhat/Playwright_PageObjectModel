@@ -1,6 +1,6 @@
-const { expect } = require("@playwright/test");
+import { expect } from "@playwright/test";
 
-exports.HomePage = class HomePage {
+export class HomePage {
   constructor(page) {
     this.page = page;
 
@@ -12,4 +12,4 @@ exports.HomePage = class HomePage {
     await expect(this.checkYourRateCTA).toBeVisible();
     await this.checkYourRateCTA.click();
   }
-};
+}
