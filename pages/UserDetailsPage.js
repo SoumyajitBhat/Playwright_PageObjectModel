@@ -1,6 +1,6 @@
-const { expect } = require("@playwright/test");
+import { expect } from "@playwright/test";
 
-exports.UserDetailsPage = class UserDetailsPage {
+export class UserDetailsPage {
   constructor(page) {
     this.page = page;
 
@@ -15,7 +15,7 @@ exports.UserDetailsPage = class UserDetailsPage {
     this.driverLicenceInput = page.locator('#DriverLicenceNo');
     this.driverLicenceVersionInput = page.locator('#DriverLicenceVersion');
     this.continueButton = page.getByRole('button', { name: 'Continue' });
-    
+
   }
 
   async verifyUserDetaildsPage() {
@@ -23,7 +23,7 @@ exports.UserDetailsPage = class UserDetailsPage {
     await expect(this.firstNameInput).toBeVisible();
   }
 
-  async fillUserDetails({firstName,middleName,lastName,gender,day,month,year,driverLicence,driverLicenceVersion}) {
+  async fillUserDetails({ firstName, middleName, lastName, gender, day, month, year, driverLicence, driverLicenceVersion }) {
     await this.firstNameInput.fill(firstName);
     await this.middleNameInput.fill(middleName);
     await this.lastNameInput.fill(lastName);
@@ -35,4 +35,4 @@ exports.UserDetailsPage = class UserDetailsPage {
     await this.driverLicenceVersionInput.fill(driverLicenceVersion);
     await this.continueButton.click();
   }
-};
+}

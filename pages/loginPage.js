@@ -1,4 +1,4 @@
-exports.LoginPage = class LoginPage {
+export class LoginPage {
   constructor(page) {
     this.page = page;
     this.url = "https://staging.xag.co.nz/";
@@ -16,4 +16,4 @@ exports.LoginPage = class LoginPage {
     await this.passwordInput.fill(password);
     await this.submitButton.click();
   }
-};
+}
