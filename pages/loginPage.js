@@ -1,7 +1,7 @@
 exports.LoginPage = class LoginPage {
   constructor(page) {
     this.page = page;
-    this.url = 'https://staging.xag.co.nz/';
+    this.url = "https://staging.xag.co.nz/";
 
     // Locators
     this.passwordInput = page.locator('[type="password"]');

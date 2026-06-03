@@ -5,9 +5,20 @@ exports.GetStartedPage = class GetStartedPage {
     this.page = page;
 
     // Locators
+    this.GetStartedPageHeading = page.getByText('Let’s get started. How much')
     this.slider = page.locator(".rangeslider");
     this.sliderHandle = page.locator(".rangeslider__handle");
+    this.manualEntryOption = page.getByRole('heading', { name: 'Or manually enter your amount' });
+    this.loanAmountInput = page.locator("#manualAmount");
+    this.loanPurposeDropdown = page.getByRole("combobox");
+    this.emailInput = page.locator("#Email");
+    this.confirmEmailInput = page.locator("#email");
+    this.mobilePhoneInput = page.locator("#MobilePhone");
+    this.continueButton = page.getByRole("button", {name: "Continue",});
   }
+  getSliderAmount(amount) {
+   return this.page.getByText(amount.toString(), { exact: true });
+}
 
   async setLoanAmount(targetAmount) {
     const minAmount = 2000;
@@ -35,7 +46,20 @@ exports.GetStartedPage = class GetStartedPage {
     await this.page.mouse.up();
   }
 
-  async fillGetStartedForm() {
+  async verifyGetStartedPage() {
     await this.page.waitForURL("**/apply/getstarted");
+    await expect(this.GetStartedPageHeading).toBeVisible();
+  }
+
+  async fillGetStartedForm({amount,loanPurpose,email,phone}) {
+    await this.manualEntryOption.click();
+    await this.loanAmountInput.clear();
+    await this.loanAmountInput.fill(amount);
+    await expect(this.getSliderAmount(amount)).toBeVisible();
+    await this.loanPurposeDropdown.selectOption({label: loanPurpose,});
+    await this.emailInput.fill(email);
+    await this.confirmEmailInput.fill(email);
+    await this.mobilePhoneInput.fill(phone);
+    await this.continueButton.click();
   }
 };
