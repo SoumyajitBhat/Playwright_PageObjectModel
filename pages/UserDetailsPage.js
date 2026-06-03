@@ -18,7 +18,7 @@ export class UserDetailsPage {
 
   }
 
-  async verifyUserDetaildsPage() {
+  async verifyUserDetailsPage() {
     await this.page.waitForURL("**/apply/id");
     await expect(this.firstNameInput).toBeVisible();
   }
