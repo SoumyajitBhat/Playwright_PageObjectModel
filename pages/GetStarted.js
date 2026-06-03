@@ -56,7 +56,7 @@ exports.GetStartedPage = class GetStartedPage {
     await this.loanAmountInput.clear();
     await this.loanAmountInput.fill(amount);
     await expect(this.getSliderAmount(amount)).toBeVisible();
-    await this.loanPurposeDropdown.selectOption({label: loanPurpose,});
+    await this.loanPurposeDropdown.selectOption({label: loanPurpose});
     await this.emailInput.fill(email);
     await this.confirmEmailInput.fill(email);
     await this.mobilePhoneInput.fill(phone);
