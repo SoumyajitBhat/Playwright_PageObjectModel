@@ -7,6 +7,12 @@ import { SignupPage } from "../pages/SignupPage.js";
 import { AddressDetailsPage } from "../pages/AddressDetailsPage.js";
 import { EmploymentStatusPage } from "../pages/EmploymentStatusPage.js";
 import { BankDetailsPage } from "../pages/BankDetailsPage.js";
+import { AssetPage } from "../pages/AssetPage.js";
+import { DebtPage } from "../pages/DebtPage.js";
+import { ExpencesPage } from "../pages/ExpencesPage.js";
+import { IncomeDetailsPage } from "../pages/IncomeDetailsPage.js";
+import { PayDateSelectionPage } from "../pages/PayDateSelectionPage.js";
+import { QuotationPendingPage } from "../pages/QuotationPendingPage.js";
 
 test("Successful login validation", async ({ page }) => {
   const login = new LoginPage(page);
@@ -17,6 +23,12 @@ test("Successful login validation", async ({ page }) => {
   const addressDetails = new AddressDetailsPage(page);
   const employmentStatus = new EmploymentStatusPage(page);
   const bankDetails = new BankDetailsPage(page);
+  const assetPage = new AssetPage(page);
+  const debtPage = new DebtPage(page);
+  const expencesPage = new ExpencesPage(page);
+  const incomeDetailsPage = new IncomeDetailsPage(page);
+  const payDateSelectionPage = new PayDateSelectionPage(page);
+  const quotationPendingPage = new QuotationPendingPage(page);
 
   await login.navigate();
   await login.login("6Q83gs@&r");
@@ -44,5 +56,17 @@ test("Successful login validation", async ({ page }) => {
   await employmentStatus.verifyEmploymentStatusPage();
   await employmentStatus.fillEmploymentDetails({ employmentStatus: "Full-time", employmentType: "Office employment", currentJobDuration: "2 years +", howDidYouHearAboutUs: "Facebook" });
   await bankDetails.verifyBankDetailsPage();
-  await bankDetails.fillBankDetails({ bankName: "Dummy - Standard", catalog: "cs.testh", password: "cs.testh" });
+
+  await bankDetails.fillBankDetails({bankName: "Dummy - Standard",catalog: "cs.testh",password: "cs.testh"});
+  await assetPage.verifyAssetPage();
+  await assetPage.fillAssetDetails({asset: "House", assetValue: "300000"});
+  await debtPage.verifyDebtPage();
+  await debtPage.fillDebtDetails({liabilityProvider: "AMEX", liabilityType: "Personal Loan", debtValue: "1000"});
+  await expencesPage.verifyExpencesPage();
+  await expencesPage.fillExpencesDetails({mortgagePayments: "19", frequency: "Weekly", isEstimatedLivingCostCorrect: "Yes", isExpenseIncreaseExpected: "No"});
+  await incomeDetailsPage.verifyIncomeDetailsPage();
+  await incomeDetailsPage.fillIncomeDetails({incomeValue: "70000", frequency: "Monthly", incomeDecreaseExpected: "No"});
+  await payDateSelectionPage.verifyPayDateSelectionPage();
+  await payDateSelectionPage.fillPayDateDetails();
+  await quotationPendingPage.verifyQuotationPendingPage();
 });
