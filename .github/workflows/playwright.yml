@@ -9,7 +9,6 @@ on:
 
   workflow_dispatch:
 
-  # Daily schedule at 10:00 AM IST (04:30 UTC)
   schedule:
     - cron: '30 4 * * *'
 
@@ -25,18 +24,29 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
+
+      - name: Check Environment
+        run: |
+          node -v
+          npm -v
+          df -h
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
+      - name: Check Playwright version
+        run: npx playwright --version
+
+      - name: Clear Playwright cache
+        run: rm -rf ~/.cache/ms-playwright
+
+      - name: Install Chromium
+        run: DEBUG=pw:install npx playwright install chromium --with-deps
 
       - name: Run Playwright tests
         run: npx playwright test
 
-      # ✅ Upload JUnit results to AIO Test after execution
       - name: Upload test results to AIO Test
         if: ${{ always() }}
         run: |
@@ -51,7 +61,6 @@ jobs:
             -F "addCaseToCycle=false" \
             -F "file=@test-results/junit.xml;type=text/xml"
 
-      # Optional: upload Playwright HTML report
       - name: Upload Playwright HTML report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
