@@ -34,7 +34,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test tests/positive_test.spec.js
+        run: npx playwright test
 
       # ✅ Upload JUnit results to AIO Test after execution
       - name: Upload test results to AIO Test
