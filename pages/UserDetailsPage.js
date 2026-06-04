@@ -15,6 +15,8 @@ export class UserDetailsPage {
     this.driverLicenceInput = page.locator('#DriverLicenceNo');
     this.driverLicenceVersionInput = page.locator('#DriverLicenceVersion');
     this.continueButton = page.getByRole('button', { name: 'Continue' });
+    this.ageLimitAlert = page.getByText('You need to be at least 18 to');
+    this.continueAnywayButton = page.getByText('Continue anyway');
 
   }
 
@@ -34,5 +36,10 @@ export class UserDetailsPage {
     await this.driverLicenceInput.fill(driverLicence);
     await this.driverLicenceVersionInput.fill(driverLicenceVersion);
     await this.continueButton.click();
+  }
+
+  async verifyAgeLimitAlert() {
+    await expect(this.ageLimitAlert).toBeVisible();
+    await this.continueAnywayButton.click();
   }
 }
