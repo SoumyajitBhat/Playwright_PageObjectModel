@@ -1,12 +1,12 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage.js";
-import { HomePage } from "../pages/HomePage.js";
-import { GetStartedPage } from "../pages/GetStarted.js";
-import { UserDetailsPage } from "../pages/UserDetailsPage.js";
-import { SignupPage } from "../pages/SignupPage.js";
-import { AddressDetailsPage } from "../pages/AddressDetailsPage.js";
-import { EmploymentStatusPage } from "../pages/EmploymentStatusPage.js";
-import { DeclinePage } from "../pages/DeclinePage.js";
+import { LoginPage } from "../pages/portal/LoginPage.js";
+import { HomePage } from "../pages/portal/HomePage.js";
+import { GetStartedPage } from "../pages/portal/GetStarted.js";
+import { UserDetailsPage } from "../pages/portal/UserDetailsPage.js";
+import { SignupPage } from "../pages/portal/SignupPage.js";
+import { AddressDetailsPage } from "../pages/portal/AddressDetailsPage.js";
+import { EmploymentStatusPage } from "../pages/portal/EmploymentStatusPage.js";
+import { DeclinePage } from "../pages/portal/DeclinePage.js";
 
 test("Successful login validation", async ({ page }) => {
   const login = new LoginPage(page);

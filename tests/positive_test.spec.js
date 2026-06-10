@@ -1,18 +1,18 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage.js";
-import { HomePage } from "../pages/HomePage.js";
-import { GetStartedPage } from "../pages/GetStarted.js";
-import { UserDetailsPage } from "../pages/UserDetailsPage.js";
-import { SignupPage } from "../pages/SignupPage.js";
-import { AddressDetailsPage } from "../pages/AddressDetailsPage.js";
-import { EmploymentStatusPage } from "../pages/EmploymentStatusPage.js";
-import { BankDetailsPage } from "../pages/BankDetailsPage.js";
-import { AssetPage } from "../pages/AssetPage.js";
-import { DebtPage } from "../pages/DebtPage.js";
-import { ExpencesPage } from "../pages/ExpencesPage.js";
-import { IncomeDetailsPage } from "../pages/IncomeDetailsPage.js";
-import { PayDateSelectionPage } from "../pages/PayDateSelectionPage.js";
-import { QuotationPendingPage } from "../pages/QuotationPendingPage.js";
+import { LoginPage } from "../pages/portal/LoginPage.js";
+import { HomePage } from "../pages/portal/HomePage.js";
+import { GetStartedPage } from "../pages/portal/GetStarted.js";
+import { UserDetailsPage } from "../pages/portal/UserDetailsPage.js";
+import { SignupPage } from "../pages/portal/SignupPage.js";
+import { AddressDetailsPage } from "../pages/portal/AddressDetailsPage.js";
+import { EmploymentStatusPage } from "../pages/portal/EmploymentStatusPage.js";
+import { BankDetailsPage } from "../pages/portal/BankDetailsPage.js";
+import { AssetPage } from "../pages/portal/AssetPage.js";
+import { DebtPage } from "../pages/portal/DebtPage.js";
+import { ExpencesPage } from "../pages/portal/ExpencesPage.js";
+import { IncomeDetailsPage } from "../pages/portal/IncomeDetailsPage.js";
+import { PayDateSelectionPage } from "../pages/portal/PayDateSelectionPage.js";
+import { QuotationPendingPage } from "../pages/portal/QuotationPendingPage.js";
 
 test("Successful login validation", async ({ page }) => {
   const login = new LoginPage(page);
