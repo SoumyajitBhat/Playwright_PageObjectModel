@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../pages/salesforce/LoginPage";
+import { LoginPage } from "../pages/salesforcenew/LoginPage";
 import { generate } from "otplib";
-import { HomePage } from "../pages/salesforce/HomePage";
-import { ServiceConfigPage } from "../pages/loanServicing/ServiceConfigPage";
-import { ApexJobPage } from "../pages/loanServicing/ApexJobPage";
-import { CLContractPage } from "../pages/loanServicing/CLContractPage";
+import { HomePage } from "../pages/salesforcenew/HomePage";
+import { ServiceConfigPage } from "../pages/loanservicingnew/ServiceConfigPage";
+import { ApexJobPage } from "../pages/loanservicingnew/ApexJobPage";
+import { CLContractPage } from "../pages/loanservicingnew/CLContractPage";
 
 test("Date movement validation", async ({ page }) => {
   const login = new LoginPage(page);
