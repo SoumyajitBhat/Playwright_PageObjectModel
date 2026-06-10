@@ -1,11 +1,10 @@
-import { expect } from "@playwright/test";
 export class HomePage {
-  
   constructor(page) {
     this.page = page;
 
     // Locators
     this.servicingConfig = page.getByRole('link', { name: 'Servicing Configuration' });
+    this.clContracts = page.getByRole('link', { name: 'CL Contracts' });
   }
 
   async verifyHomePage() {
@@ -14,6 +13,9 @@ export class HomePage {
 
   async clickServicingConfig() {
     await this.servicingConfig.click();
-    await this.page.waitForTimeout(5000); // waits for 5 seconds
+  }
+
+  async clickCLContracts() {
+    await this.clContracts.click();
   }
 }

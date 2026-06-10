@@ -1,4 +1,3 @@
-import { expect } from "@playwright/test";
 import { SodEodPage } from "./SodEodPage";
 export class ServiceConfigPage {
   constructor(page) {
@@ -9,9 +8,7 @@ export class ServiceConfigPage {
   }
 
   async verifyServiceConfigPage() {
-    await this.page.waitForURL(
-      "**/apex/organizationPreference?sfdc.tabName=01r280000008IZ2",
-    );
+    await this.page.waitForURL("**/apex/organizationPreference?sfdc.tabName=01r280000008IZ2");
   }
 
   async clickSODEODProcess() {
