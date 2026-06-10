@@ -37,8 +37,6 @@ export default defineConfig({
       'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
 
     launchOptions: {
-      slowMo: 1000,
-
       args: [
         '--disable-blink-features=AutomationControlled',
         '--disable-dev-shm-usage',
