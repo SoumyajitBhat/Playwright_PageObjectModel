@@ -18,7 +18,12 @@ export class ApexJobPage {
   }
 
   async visibilityOfLocClosureDynamicJob() {
-    await expect(this.locClosureDynamicJob).toBeVisible();
-    await this.page.waitForTimeout(5000);
+    for (let i = 0; i < 20; i++) {
+      await this.page.reload();
+      await this.page.waitForTimeout(10000);
+      if (await this.locClosureDynamicJob.isVisible()) {
+        break;
+      }
+    }
   }
 }

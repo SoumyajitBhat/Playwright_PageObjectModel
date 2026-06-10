@@ -78,7 +78,7 @@ export class SodEodPage {
 
   async moveSystemDateToFuture(daysToAdd) {
     const futureDate = await this.enterFutureDate(daysToAdd);
-    // await this.clickMoveToDate();
-    // await this.waitForDayStarted(futureDate);
+    await this.clickMoveToDate();
+    await this.waitForDayStarted(futureDate);
   }
 }
