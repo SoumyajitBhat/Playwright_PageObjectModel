@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
-import { LoginPage } from "../pages/Salesforce/LoginPage";
+import { LoginPage } from "../pages/salesforce/LoginPage";
 import { generate } from "otplib";
-import { HomePage } from "../pages/Salesforce/HomePage";
-import { ServiceConfigPage } from "../pages/LoanServiceing/ServiceConfigPage";
-import { ApexJobPage } from "../pages/LoanServiceing/ApexJobPage";
+import { HomePage } from "../pages/salesforce/HomePage";
+import { ServiceConfigPage } from "../pages/loanServicing/ServiceConfigPage";
+import { ApexJobPage } from "../pages/loanServicing/ApexJobPage";
 
 test("Date movement validation", async ({ page }) => {
   const login = new LoginPage(page);
