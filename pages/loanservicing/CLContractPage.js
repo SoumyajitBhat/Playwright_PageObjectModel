@@ -1,4 +1,5 @@
 import { expect } from "@playwright/test";
+import { TransactionSummaryPage } from "./TransactionSummaryPage";
 export class CLContractPage {
   constructor(page) {
     this.page = page;
@@ -30,8 +31,19 @@ export class CLContractPage {
     this.billsTable = page.locator('table.list:has(th:text-is("Due Id"))');
     this.billsTableHeaderCells = this.billsTable.locator('tr.headerRow th');
     this.billsTableRows = this.billsTable.locator('tr.dataRow');
+    this.paymentTab=this.page.locator('td.rich-tab-header').filter({ hasText: /^Payment\(s\)$/ });
+    this.loanPaymentTransactionTable = this.page.locator('td[id*=tabPayment] table.list:has(th:text-is("Loan Payment Transaction ID"))');
+    this.loanPaymentTransactionHeaderCells = this.loanPaymentTransactionTable.locator('tr.headerRow th');
+    this.loanPaymentTransactionRows = this.loanPaymentTransactionTable.locator('tr.dataRow');
     this.accountStatement=this.page.getByRole('link', { name: 'Account Statement' });
     this.transactionSummary=this.page.locator('a:text-is("Transaction Summary")');
+    this.transactionSummaryFrame=this.page.frameLocator('#mfiflexIframeView');
+    this.transactionSummaryPageHeader=this.transactionSummaryFrame.getByRole('heading', { name: /Transaction history/ });
+    this.transactionSummaryTable =this.transactionSummaryFrame.locator('#txnSummaryPage\\:j_id47\\:txnSummaryPBId\\:txnTable');
+    this.transactionSummaryHeaderCells = this.transactionSummaryTable.locator('thead th');
+    this.transactionSummaryRows = this.transactionSummaryTable.locator('tbody tr');
+    this.closeTransactionSummary=this.page.locator('#closeModalButton');
+    this.txnSummaryButton=this.page.getByRole('button', { name: 'TxnSummary' }).first();
   }
 
   async verifyCLContractPage() {
@@ -261,13 +273,110 @@ export class CLContractPage {
     console.log(`Status: ${status} | Column: '${columnName}' | Actual Value: '${actualValue}' | Expected Value: '${expectedValue}'`);
   }
 
+  async clickPaymentTab() {
+    await this.paymentTab.click();
+  }
+
+  async verifyLoanPaymentTransactionColumnValue(transactionDate,columnName,expectedValue) {
+    // Find target column index
+    const headers = await this.loanPaymentTransactionHeaderCells;
+    let targetColumnIndex = -1;
+    for (let i = 0; i < await headers.count(); i++) {
+      const headerText = (await headers.nth(i).textContent())?.trim();
+      if (headerText === columnName) {
+        targetColumnIndex = i;
+        break;
+      }
+    }
+    if (targetColumnIndex === -1) {
+      throw new Error(`Column '${columnName}' not found`);
+    }
+    // Find matching row by Transaction Date
+    const rows = await this.loanPaymentTransactionRows;
+    for (let r = 0; r < await rows.count(); r++) {
+      const row = rows.nth(r);
+      // Transaction Date = 4th displayed column
+      // Row contains: td(Action), th(ID), td(Payment Mode), td(Transaction Date)
+      const rowTransactionDate =(await row.locator('td').nth(2).textContent())?.trim();
+      if (rowTransactionDate === transactionDate) {
+        const allCells = row.locator('th, td');
+        const targetCell = allCells.nth(targetColumnIndex);
+        let actualValue =(await targetCell.textContent())?.trim() || '';
+        if (!actualValue) {
+          const elementWithTitle = targetCell.locator('[title]').first();
+          if (await elementWithTitle.count()) {
+            actualValue =(await elementWithTitle.getAttribute('title')) || '';
+          }
+        }
+        const status =actualValue === expectedValue ? 'PASS' : 'FAIL';
+        console.log(`Status: ${status} | Transaction Date: '${transactionDate}' | Column: '${columnName}' | Actual Value: '${actualValue}' | Expected Value: '${expectedValue}'`);
+        if (status === 'FAIL') {
+          throw new Error(`Validation failed for Transaction Date '${transactionDate}', Column '${columnName}'. Expected '${expectedValue}' but found '${actualValue}'`);
+        }
+        return;
+      }
+    }
+    throw new Error(`Row with Transaction Date '${transactionDate}' not found`);
+  }
+
   async clickAccountStatement() {
     await this.accountStatement.click();
   }
 
   async clickTransactionSummary() {
     await this.transactionSummary.click();
-    await this.page.waitForTimeout(5000);
   }
 
+  async verifyTransactionSummaryPage() {
+    await expect(this.transactionSummaryPageHeader).toBeVisible();
+
+  }
+
+  async verifyTransactionSummaryBottomRowColumnValue(columnName, expectedValue) {
+    // Find column index
+    const headers = await this.transactionSummaryHeaderCells;
+    let targetColumnIndex = -1;
+    for (let i = 0; i < await headers.count(); i++) {
+      const headerText = (await headers.nth(i).textContent())?.trim();
+      if (headerText === columnName) {
+        targetColumnIndex = i;
+        break;
+      }
+    }
+    if (targetColumnIndex === -1) {
+      throw new Error(`Column '${columnName}' not found`);
+    }
+    // Get bottom row
+    const rows = this.transactionSummaryRows;
+    const lastRow = rows.last();
+    // Header uses <th>, rows use only <td>
+    const targetCell = lastRow.locator('td').nth(targetColumnIndex);
+    const actualValue = (await targetCell.textContent())?.trim() || '';
+    const status = actualValue === expectedValue ? 'PASS' : 'FAIL';
+    console.log(`Status: ${status} | Column: '${columnName}' | Actual Value: '${actualValue}' | Expected Value: '${expectedValue}'`);
+    if (status === 'FAIL') {
+      throw new Error(`Validation failed for column '${columnName}'. Expected '${expectedValue}' but found '${actualValue}'`);
+    }
+  }
+  
+  async clickCloseTransactionSummary() {
+    this.page.once('dialog', async dialog => {
+      console.log(`Dialog detected: ${dialog.type()} - ${dialog.message()}`);
+      await dialog.accept();
+    });
+
+    await this.closeTransactionSummary.click({
+      force: true,
+      noWaitAfter: true
+    });
+  }
+
+  async clickTxnSummaryButton() {
+      const [newPage] = await Promise.all([
+        this.page.waitForEvent("popup"),
+        await this.txnSummaryButton.click(),
+      ]);
+      await newPage.waitForLoadState();
+      return new TransactionSummaryPage(newPage);
+    }
 }
