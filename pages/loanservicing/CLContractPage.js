@@ -44,6 +44,7 @@ export class CLContractPage {
     this.transactionSummaryRows = this.transactionSummaryTable.locator('tbody tr');
     this.closeTransactionSummary=this.page.locator('#closeModalButton');
     this.txnSummaryButton=this.page.getByRole('button', { name: 'TxnSummary' }).first();
+    this.detailsTab=this.page.getByText('Details', { exact: true });
   }
 
   async verifyCLContractPage() {
@@ -61,16 +62,19 @@ export class CLContractPage {
   }
 
   async verifyNextDueDate(date) {
+    await this.nextDueDate.scrollIntoViewIfNeeded();
     const nextDueDate = await this.nextDueDate.textContent();
     expect(nextDueDate?.trim()).toBe(date);
   }
 
   async verifyCLContractStatus(contractStatus) {
+    await this.status.scrollIntoViewIfNeeded();
     const status = await this.status.textContent();
     expect(status?.trim()).toBe(contractStatus);
   }
 
   async verifyCLContractDisbursalStatus(disbursalStatus) {
+    await this.disbursalStatus.scrollIntoViewIfNeeded();
     const disbursalStatusText = await this.disbursalStatus.textContent();
     expect(disbursalStatusText?.trim()).toBe(disbursalStatus);
   }
@@ -369,6 +373,10 @@ export class CLContractPage {
       force: true,
       noWaitAfter: true
     });
+  }
+
+  async clickDetailsTab() {
+    await this.detailsTab.click();
   }
 
   async clickTxnSummaryButton() {

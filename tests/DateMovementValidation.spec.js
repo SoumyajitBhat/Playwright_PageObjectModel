@@ -1,4 +1,5 @@
 import { test } from "@playwright/test";
+import { Screencast } from "../utils/screencast";
 import { LoginPage } from "../pages/salesforce/LoginPage";
 import { generate } from "otplib";
 import { HomePage } from "../pages/salesforce/HomePage";
@@ -14,7 +15,7 @@ test("Date movement validation", async ({ page }) => {
   const apexJobPage = new ApexJobPage(page);
   const clContractPage = new CLContractPage(page);
   let transactionSummaryPage = undefined;
-//login
+  await Screencast.showStep(page, "Login");
   await login.navigate();
   await login.login("soumyajit.bhattacharjee@cloudkaptan.com", "Somu@1814029");
   await login.verifyOTPPage();
@@ -22,68 +23,72 @@ test("Date movement validation", async ({ page }) => {
   const otp = await generate({secret: "RWLRCBMINBI6WB3YBVKL6EK2XSUTRO2M"});
 
   await login.enterOTPandVerify(String(otp));
-  //opening CL contract before date movement
+  await Screencast.showStep(page, "Opening CL contract before date movement");
   await homePage.verifyHomePage();
   await homePage.clickCLContracts();
   await clContractPage.verifyCLContractPage();
   await clContractPage.clickCLContract("LAI-00029379");
   await clContractPage.verifyCLContractDetails();
-  //validate next due date
+  await Screencast.showStep(page, "Validating next due date");
   await clContractPage.verifyNextDueDate('31/01/2026');
-  //validate loan status
+  await Screencast.showStep(page, "Validating loan status");
   await clContractPage.verifyCLContractStatus('Active - Good Standing');
-  //validate disbursal status
+  await Screencast.showStep(page, "Validating disbursal status");
   await clContractPage.verifyCLContractDisbursalStatus('Fully Disbursed');
-  //validate periodic fee setup
+  await Screencast.showStep(page, "Validating periodic fee setup");
   await clContractPage.clickPeriodicFeeSetup();
   await clContractPage.verifyValueByRowAndColumnofFeeTable('Administration Fee','Active','Checked');
-  //validate automated payment setup is active
+  await Screencast.showStep(page, "Validating automated payment setup");
   await clContractPage.clickAutomatedPaymentSetups();
   await clContractPage.verifyAutomatedPaymentSetupColumnValue('Active','Checked');
-  //validate transactions
+  await Screencast.showStep(page, "Validating transactions");
   await clContractPage.clickTransactionsTab();
-  //validate loan disbursal transaction is cleared
+  await Screencast.showStep(page, "Validating loan disbursal transaction is cleared");
   await clContractPage.clickFundingTab();
   await clContractPage.verifyLoanDisbursalTransactionColumnValue('Cleared','Checked');
-  //validate charges
+  await Screencast.showStep(page, "Validating charges");
   await clContractPage.clickChargesTab();
   await clContractPage.verifyValueByRowAndColumnofChargesTable('Administration Fee','Paid','Checked');
-  //validate bills due date and payment date
+  await Screencast.showStep(page, "Validating bills due date and payment date");
   await clContractPage.clickBillsTab();
   await clContractPage.verifyBillsTableTopRowColumnValue('Due Date','24/01/2026');
   await clContractPage.verifyBillsTableTopRowColumnValue('Payment Date','24/01/2026');
-  //date movement process started
+  await Screencast.showStep(page, "Date movement process started");
   await homePage.clickServicingConfig();
   await serviceConfigPage.verifyServiceConfigPage();
   sodEodPage = await serviceConfigPage.clickSODEODProcess();
   await sodEodPage.verifySodEodPage();
   await sodEodPage.moveSystemDateToFuture(1);
   await page.bringToFront();
-  //visited apex jobs page to verify date movement completion
+  await Screencast.showStep(page, "Visited apex jobs page to verify date movement completion");
   await apexJobPage.navigate();
   await apexJobPage.verifyApexJobPage();
   await apexJobPage.visibilityOfLocClosureDynamicJob();
-  //Validate cl contract post date movement
+  await Screencast.showStep(page, "Validate cl contract post date movement");
   await homePage.clickCLContracts();
   await clContractPage.verifyCLContractPage();
   await clContractPage.clickCLContract("LAI-00029379");
   await clContractPage.verifyCLContractDetails();
   await clContractPage.clickTransactionsTab();
-  //check bill generated, due date, payment date
+  await Screencast.showStep(page, "Checking bill generated, due date, payment date");
   await clContractPage.clickBillsTab();
   await clContractPage.verifyBillsTableTopRowColumnValue('Due Date','24/01/2026');
   await clContractPage.verifyBillsTableTopRowColumnValue('Payment Date','24/01/2026');
-  //check payment generated, transaction date
+  await Screencast.showStep(page, "Checking payment generated, transaction date");
   await clContractPage.clickPaymentTab();
   await clContractPage.verifyLoanPaymentTransactionColumnValue('24/01/2026','Cleared','Checked');
-
-  //validate loan payment transac summary from Q2 and ck custom
+  await Screencast.showStep(page, "Validating loan payment transac summary from Q2");
   await clContractPage.clickAccountStatement();
   await clContractPage.clickTransactionSummary();
   await clContractPage.verifyTransactionSummaryPage();
   await clContractPage.verifyTransactionSummaryBottomRowColumnValue('Transaction Date', '24/01/2026');
   await clContractPage.clickCloseTransactionSummary();
+  await clContractPage.clickDetailsTab();
+  await Screencast.showStep(page, "Validating loan payment transac summary from CK custom");
+  await clContractPage.clickDetailsTab();
   transactionSummaryPage = await clContractPage.clickTxnSummaryButton();
   await transactionSummaryPage.verifyTransactionSummaryPage();
-
+  await transactionSummaryPage.selectStartDate('01/01/2026');
+  await transactionSummaryPage.selectEndDate('24/01/2026');
+  await transactionSummaryPage.clickHeader();
 });
